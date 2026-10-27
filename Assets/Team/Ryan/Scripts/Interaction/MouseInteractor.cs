@@ -18,20 +18,38 @@ public class MouseInteractor : MonoBehaviour
         {
             cam = Camera.main;
         }
+
+        if (cam == null)
+        {
+            Debug.LogError("MouseInteractor requires a camera or a MainCamera-tagged camera.", this);
+        }
     }
 
     void Update()
     {
+        if (cam == null)
+        {
+            return;
+        }
+
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        Debug.DrawRay(ray.origin, ray.direction * maxDistance, Color.green);
+        IInteractable target = GetInteractableUnderMouse(ray);
+
         // mouse pressed this frame
         if (Input.GetMouseButtonDown(0))
         {
+            Debug.Log(
+                target != null
+                    ? $"Interaction ray fired and found {((MonoBehaviour)target).name}."
+                    : "Interaction ray fired; no interactable was hit.",
+                this);
+
             // dont click through UI buttons
             if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
             {
                 return;
             }
-
-            IInteractable target = GetInteractableUnderMouse();
 
             if (target != null)
             {
@@ -70,10 +88,8 @@ public class MouseInteractor : MonoBehaviour
 
     // fires a ray from the camera through the mouse and returns the IInteractable it hits (or null)
     // checks both 3D colliders (organs in the body) and 2D colliders (tools etc) and picks whichever is closer
-    private IInteractable GetInteractableUnderMouse()
+    private IInteractable GetInteractableUnderMouse(Ray ray)
     {
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-
         Collider closestCollider3D = null;
         Collider2D closestCollider2D = null;
         float distance3D = Mathf.Infinity;

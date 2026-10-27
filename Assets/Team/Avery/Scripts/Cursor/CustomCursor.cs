@@ -11,7 +11,7 @@ public class CustomCursor : MonoBehaviour
     public Texture2D grab;
     private Texture2D currentCursor;
 
-    public Vector2 hotspot = new Vector2(56, 12);
+    public Vector2 hotspot = new Vector2(28, 6);
     public CursorMode cursorMode;
 
     private void Awake()
