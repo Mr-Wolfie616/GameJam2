@@ -65,6 +65,13 @@ public class RandomEventHandler : MonoBehaviour
 
     public void TriggerRandomEvent()
     {
+        if (currentEvent != null)
+        {
+            currentEvent.EndEvent();
+            Debug.LogWarning("Force Ending Event");
+            return;
+        }
+
         if (randomEvents.Count == 0)
         {
             Debug.LogWarning("No random events assigned to the RandomEventHandler.");
@@ -82,6 +89,15 @@ public class RandomEventHandler : MonoBehaviour
         else
         {
             Debug.LogWarning($"Random event at index {randomIndex} is null.");
+        }
+    }
+
+    private void Update()
+    {
+        // For Testing
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            TriggerRandomEvent();
         }
     }
 }

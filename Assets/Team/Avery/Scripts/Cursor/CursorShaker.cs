@@ -3,10 +3,13 @@ using UnityEngine;
 
 public class CursorShaker : MonoBehaviour
 {
-    public float shakeSpeed = 5f;
-    public float shakeIntensity = 250f;
+    public float minShakeSpeed = 0.1f;
+    public float maxShakeSpeed = 0.5f;
+    public float minIntensity = 15f;
+    public float maxIntensity = 100f;
     private bool shaking = false;
-
+    public float timeToMaxSpeed = 15f;
+    public float jitterMulti = 0.025f;
     public void StartShaking()
     {
         if (!shaking)
@@ -27,14 +30,25 @@ public class CursorShaker : MonoBehaviour
     }
     private IEnumerator ShakeHand()
     {
+        float elapsed = 0f;
+        float duration = timeToMaxSpeed;
         while (shaking)
         {
-            float time = Time.time * shakeSpeed;
-            float x = (Mathf.PerlinNoise(0f , time) * 2f - 1f) * shakeIntensity;
-            float y = (Mathf.PerlinNoise(500f , -time) * 2f - 1f) * shakeIntensity;
-            yield return null;
+            float t = Mathf.Clamp01(elapsed / duration);
+            float shakeSpeed = Mathf.Lerp(minShakeSpeed, maxShakeSpeed, t);
+            float shakeIntensity = Mathf.Lerp(minIntensity, maxIntensity, t);
 
-            CustomCursor.instance.SetOffset(new Vector2(x, y));
+            float time = Time.time * shakeSpeed;
+            float x = (Mathf.PerlinNoise(0f, time) * 2f - 1f) * shakeIntensity;
+            float y = (Mathf.PerlinNoise(500f, -time) * 2f - 1f) * shakeIntensity;
+
+            float xJitter = Random.Range(-shakeIntensity, shakeIntensity) * jitterMulti;
+            float yJitter = Random.Range(-shakeIntensity, shakeIntensity) * jitterMulti;
+
+            CustomCursor.instance.SetOffset(new Vector2(x + xJitter, y + yJitter));
+
+            elapsed += Time.deltaTime;
+            yield return null;
         }
     }
 }
