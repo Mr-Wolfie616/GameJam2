@@ -847,7 +847,7 @@ MonoBehaviour:
   click: {fileID: 0}
   hover: {fileID: 0}
   grab: {fileID: 0}
-  hotspot: {x: 56, y: 12}
+  hotspot: {x: 28, y: 6}
   cursorMode: 1
 --- !u!4 &1914722604
 Transform:
