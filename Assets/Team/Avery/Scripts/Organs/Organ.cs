@@ -16,5 +16,6 @@ public enum OrganType {
     Liver,
     Stomach,
     Intestines,
-    Pancreas
+    Pancreas,
+    None
 }
