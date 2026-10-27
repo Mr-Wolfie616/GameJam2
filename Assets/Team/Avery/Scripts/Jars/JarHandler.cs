@@ -1,14 +1,13 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class JarHandler : MonoBehaviour
 {
     public OrganJar[] jars;
-    public static UnityEvent updateJar;
 
     private void OnEnable()
     {
-        updateJar.AddListener(CheckIfThePlayerDidIt);
+        OrganJar.UpdateJar += CheckIfThePlayerDidIt;
     }
     private bool CheckAllJarsFilled()
     {
@@ -24,6 +23,8 @@ public class JarHandler : MonoBehaviour
 
     public void CheckIfThePlayerDidIt()
     {
+        Debug.Log("Checking if the player filled all jars correctly...");
+
         if (!CheckAllJarsFilled()) { return; }
 
         foreach (OrganJar jar in jars)
