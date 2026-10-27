@@ -2,6 +2,19 @@ using UnityEngine;
 
 public class Organ : MonoBehaviour
 {
-    public int organID = 0;
-    public string organName = "Heart";
+    public OrganType type;
+
+    public bool insideBody;
+    public bool inJar;
+    public bool inHand;
+}
+
+public enum OrganType {
+    Heart,
+    Lung,
+    Kidney,
+    Liver,
+    Stomach,
+    Intestines,
+    Pancreas
 }
