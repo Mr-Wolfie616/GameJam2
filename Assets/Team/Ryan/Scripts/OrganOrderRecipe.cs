@@ -17,6 +17,10 @@ public class OrganOrderRecipe : MonoBehaviour
     public int maxOrderSize = 3;
     public bool generateOrderOnStart = true;
 
+    [Header("Testing")]
+    // tick this to test without jars, use the menu on the component (right click the header) to tick organs off
+    public bool testWithoutJars = false;
+
     [Header("UI")]
     public TMP_Text orderText;
     public TMP_Text warningText;
@@ -28,7 +32,7 @@ public class OrganOrderRecipe : MonoBehaviour
     {
         jars = FindObjectsByType<OrganJar>(FindObjectsSortMode.None);
 
-        if (jars.Length == 0)
+        if (jars.Length == 0 && !testWithoutJars)
         {
             Debug.LogError("No organ jars found in the scene");
         }
@@ -41,7 +45,8 @@ public class OrganOrderRecipe : MonoBehaviour
 
     void Update()
     {
-        if (currentOrder.Count == 0)
+        // in test mode organs are ticked off by hand instead of by the jars
+        if (currentOrder.Count == 0 || testWithoutJars)
         {
             return;
         }
@@ -98,7 +103,7 @@ public class OrganOrderRecipe : MonoBehaviour
 
         foreach (OrganType type in System.Enum.GetValues(typeof(OrganType)))
         {
-            if (FindJar(type) != null)
+            if (testWithoutJars || FindJar(type) != null)
             {
                 organsLeft.Add(type);
             }
@@ -119,6 +124,37 @@ public class OrganOrderRecipe : MonoBehaviour
             currentOrder.Add(item);
             organsLeft.RemoveAt(randomIndex);
         }
+    }
+
+    // test only - ticks off the next organ in the order like a jar was filled
+    [ContextMenu("Test: Complete Next Organ")]
+    private void TestCompleteNextOrgan()
+    {
+        foreach (OrderItem item in currentOrder)
+        {
+            if (!item.completed)
+            {
+                item.completed = true;
+                break;
+            }
+        }
+
+        if (currentOrder.Count > 0 && IsOrderComplete())
+        {
+            currentOrder.Clear();
+            orderText.SetText("Thank you for your order");
+        }
+        else
+        {
+            UpdateOrderText();
+        }
+    }
+
+    // test only - same as pressing a new order button
+    [ContextMenu("Test: New Order")]
+    private void TestNewOrder()
+    {
+        TryGenerateOrder();
     }
 
     // other scripts can use this to check if an organ is still needed
