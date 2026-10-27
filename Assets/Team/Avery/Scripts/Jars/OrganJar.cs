@@ -37,6 +37,8 @@ public class OrganJar : MonoBehaviour
             correctFill = false;
             Debug.Log("Incorrect organ.");
         }
+
+        JarHandler.updateJar.Invoke();
     }
 
     public void TakeOutJar()
