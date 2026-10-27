@@ -12,11 +12,6 @@ public class Timer : MonoBehaviour
 
     public static event Action TimerEnd;
 
-    void Start()
-    {
-
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -38,5 +33,12 @@ public class Timer : MonoBehaviour
         int Minutes = Mathf.FloorToInt(remainingTime / 60);
         int Seconds = Mathf.FloorToInt(remainingTime % 60);
         timerText.text = string.Format("{0:00}:{1:00}", Minutes, Seconds);
+    }
+
+    public void CancelTimer()
+    {
+        remainingTime = 0;
+        TimerEnd.Invoke();
+        Debug.Log("Game Ended Early");
     }
 }
