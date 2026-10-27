@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class CustomCursor : MonoBehaviour
 {
+    public static CustomCursor instance;
+
     // Cursor textures need to be 64x but exported 4x at 256x for scale
     public Texture2D point;
     public Texture2D click;
@@ -11,6 +13,19 @@ public class CustomCursor : MonoBehaviour
 
     public Vector2 hotspot = new Vector2(56, 12);
     public CursorMode cursorMode;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {
