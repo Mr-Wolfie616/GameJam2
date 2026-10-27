@@ -3,33 +3,30 @@ using UnityEngine.Events;
 
 public class LoseConCheck : MonoBehaviour
 {
-    private int SuccessfulOrders = 0;
-    private int FailedOrders = 0;
+    public int SuccessfulOrders = 0;
+    public int FailedOrders = 0;
     private int AmountOfFailedOrdersBeforeYouLoseTheGame = 5;
-
-    public static UnityEvent PlayerSucceeds;
-    public static UnityEvent PlayerFails;
+    private bool DidThePlayerManageToCompleteEverythingCorrectly = false;
 
     void OnEnable()
     {
-        PlayerSucceeds.AddListener(PlayerDidIt);
-        PlayerFails.AddListener(PlayerDidntIt);
+        JarHandler.OnSucceed += PlayerDidIt;
+        JarHandler.OnFail += PlayerDidntIt;
+        Timer.TimerEnd += TimerEnds
     }
 
-    void Update()
+    void PlayerDidIt() { DidThePlayerManageToCompleteEverythingCorrectly = true; }
+    void PlayerDidntIt() { DidThePlayerManageToCompleteEverythingCorrectly = true; }
+    void TimerEnds()
     {
-        
-    }
-
-    void PlayerDidIt() { SuccessfulOrders++; }
-    void PlayerDidntIt() 
-    { 
-        FailedOrders++; 
+        if(DidThePlayerManageToCompleteEverythingCorrectly) SuccessfulOrders++;
+        else FailedOrders++;
         if(FailedOrders >= AmountOfFailedOrdersBeforeYouLoseTheGame) YouLose();
     }
 
     void YouLose()
     {
-        Debug.Log("You Lose");
+        SuccessfulOrders = 0;
+        FailedOrders = 0;
     }
 }

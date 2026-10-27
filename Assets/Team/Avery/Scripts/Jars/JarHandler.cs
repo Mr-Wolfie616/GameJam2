@@ -1,9 +1,16 @@
+using NUnit.Framework;
 using System;
 using UnityEngine;
+using System.Collections.Generic ;
 
 public class JarHandler : MonoBehaviour
 {
     public OrganJar[] jars;
+
+    public static event Action OnSucceed;
+    public static event Action OnFail;
+
+    private List<OrganJar> needyJars = new();
 
     private void OnEnable()
     {
@@ -25,20 +32,29 @@ public class JarHandler : MonoBehaviour
     {
         Debug.Log("Checking if the player filled all jars correctly...");
 
-        if (!CheckAllJarsFilled()) { return; }
+        needyJars.Clear();
 
-        foreach (OrganJar jar in jars)
+        foreach(OrganJar organJar in jars)
         {
-            if (!jar.correctFill)
+            if (organJar.wantedOrgan != OrganType.None)
+            {
+                needyJars.Add(organJar);
+            }
+        }
+
+        foreach (OrganJar jar in needyJars)
+        {
+            if (!jar.correctFill )
             {
                 Debug.Log("Player did not fill all jars correctly.");
-                LoseConCheck.PlayerFails.Invoke();
+                OnFail.Invoke();
                 return;
             }
             else
             {
                 Debug.Log("Player filled all jars correctly.");
-                LoseConCheck.PlayerSucceeds.Invoke();
+                OnSucceed.Invoke();
+                return;
             }
         }
     }
