@@ -20,6 +20,8 @@ public class OrganJar : MonoBehaviour
             return;
         }
 
+        full = true;
+
         currentOrgan = organ;
         OrganType type = currentOrgan.type;
         currentOrgan.inJar = true;
@@ -27,7 +29,6 @@ public class OrganJar : MonoBehaviour
 
         if (type == wantedOrgan)
         {
-            full = true;
             correctFill = true;
             Debug.Log("Jar filled with the correct organ: " + type.ToString());
         }
