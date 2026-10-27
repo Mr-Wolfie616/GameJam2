@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class CursorShaker : MonoBehaviour
 {
-    public float minShakeSpeed = 0.1f;
-    public float maxShakeSpeed = 0.5f;
-    public float minIntensity = 15f;
-    public float maxIntensity = 100f;
+    public float minShakeSpeed = 0.2f;
+    public float maxShakeSpeed = 1f;
+    public float minIntensity = 50f;
+    public float maxIntensity = 200f;
     private bool shaking = false;
-    public float timeToMaxSpeed = 15f;
+    public float timeToMaxSpeed = 10f;
     public float jitterMulti = 0.025f;
     public void StartShaking()
     {
