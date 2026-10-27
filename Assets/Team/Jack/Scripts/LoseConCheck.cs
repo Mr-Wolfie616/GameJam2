@@ -1,3 +1,4 @@
+using UnityEditor.ShortcutManagement;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,7 +7,7 @@ public class LoseConCheck : MonoBehaviour
     public int SuccessfulOrders = 0;
     public int FailedOrders = 0;
     private int AmountOfFailedOrdersBeforeYouLoseTheGame = 5;
-    private bool DidThePlayerManageToCompleteEverythingCorrectly = false;
+    public bool DidThePlayerManageToCompleteEverythingCorrectly = false;
 
     void OnEnable()
     {
@@ -16,7 +17,7 @@ public class LoseConCheck : MonoBehaviour
     }
 
     void PlayerDidIt() { DidThePlayerManageToCompleteEverythingCorrectly = true; }
-    void PlayerDidntIt() { DidThePlayerManageToCompleteEverythingCorrectly = true; }
+    void PlayerDidntIt() { DidThePlayerManageToCompleteEverythingCorrectly = false; }
     void TimerEnds()
     {
         if(DidThePlayerManageToCompleteEverythingCorrectly) SuccessfulOrders++;
