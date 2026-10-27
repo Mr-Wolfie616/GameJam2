@@ -38,6 +38,6 @@ public class CameraSnap : MonoBehaviour
 
     private void SetCameraRotation(float targetYAngle)
     {
-        cameraObject.transform.rotation = Quaternion.Euler(0f, targetYAngle, 0f);
+        cameraObject.transform.rotation = Quaternion.Euler(10f, targetYAngle, 0f);
     }
 }
