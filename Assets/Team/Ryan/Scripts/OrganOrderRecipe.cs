@@ -7,8 +7,8 @@ public class OrganOrderRecipe : MonoBehaviour
     // holds the info for one organ in an order
     private class OrderItem
     {
-        public int organID;
-        public string organName;
+        public OrganType organType;
+        public OrganJar jar;       // the jar that holds this organ
         public bool completed;
     }
 
@@ -21,12 +21,17 @@ public class OrganOrderRecipe : MonoBehaviour
     public TMP_Text orderText;
     public TMP_Text warningText;
 
-    private List<OrderItem> organList = new List<OrderItem>();    // every type of organ in the scene
+    private OrganJar[] jars;                                       // every jar in the scene
     private List<OrderItem> currentOrder = new List<OrderItem>();  // the organs in the current order
 
     void Start()
     {
-        BuildOrganList();
+        jars = FindObjectsByType<OrganJar>(FindObjectsSortMode.None);
+
+        if (jars.Length == 0)
+        {
+            Debug.LogError("No organ jars found in the scene");
+        }
 
         if (generateOrderOnStart)
         {
@@ -34,27 +39,40 @@ public class OrganOrderRecipe : MonoBehaviour
         }
     }
 
-    // finds all the organs in the scene and saves one of each id
-    public void BuildOrganList()
+    void Update()
     {
-        organList.Clear();
-
-        Organ[] organsInScene = FindObjectsByType<Organ>(FindObjectsSortMode.None);
-
-        foreach (Organ organ in organsInScene)
+        if (currentOrder.Count == 0)
         {
-            if (FindItem(organList, organ.organID) == null)
+            return;
+        }
+
+        bool somethingChanged = false;
+
+        // check each jar in the order to see if it has the right organ in it
+        foreach (OrderItem item in currentOrder)
+        {
+            bool jarDone = item.jar != null && item.jar.full && item.jar.correctFill;
+
+            if (jarDone != item.completed)
             {
-                OrderItem newItem = new OrderItem();
-                newItem.organID = organ.organID;
-                newItem.organName = organ.organName;
-                organList.Add(newItem);
+                item.completed = jarDone; // also un-crosses it if the organ gets taken back out
+                somethingChanged = true;
             }
         }
 
-        if (organList.Count == 0)
+        if (!somethingChanged)
         {
-            Debug.LogError("No organs found in the scene");
+            return;
+        }
+
+        if (IsOrderComplete())
+        {
+            currentOrder.Clear();
+            orderText.SetText("Thank you for your order");
+        }
+        else
+        {
+            UpdateOrderText();
         }
     }
 
@@ -75,8 +93,16 @@ public class OrganOrderRecipe : MonoBehaviour
 
     private void GenerateOrder()
     {
-        // copy the organ list so organs can be removed once picked (stops the same organ coming up twice)
-        List<OrderItem> organsLeft = new List<OrderItem>(organList);
+        // make a list of every organ type that has a jar, organs get removed once picked so none come up twice
+        List<OrganType> organsLeft = new List<OrganType>();
+
+        foreach (OrganType type in System.Enum.GetValues(typeof(OrganType)))
+        {
+            if (FindJar(type) != null)
+            {
+                organsLeft.Add(type);
+            }
+        }
 
         int orderSize = Random.Range(minOrderSize, maxOrderSize + 1);
         orderSize = Mathf.Min(orderSize, organsLeft.Count);
@@ -86,8 +112,8 @@ public class OrganOrderRecipe : MonoBehaviour
             int randomIndex = Random.Range(0, organsLeft.Count);
 
             OrderItem item = new OrderItem();
-            item.organID = organsLeft[randomIndex].organID;
-            item.organName = organsLeft[randomIndex].organName;
+            item.organType = organsLeft[randomIndex];
+            item.jar = FindJar(item.organType);
             item.completed = false;
 
             currentOrder.Add(item);
@@ -95,31 +121,17 @@ public class OrganOrderRecipe : MonoBehaviour
         }
     }
 
-    // the jar calls this when it gets filled
-    public void CompleteOrganInOrder(int organID)
-    {
-        OrderItem item = FindItem(currentOrder, organID);
-
-        if (item == null || item.completed)
-        {
-            return;
-        }
-
-        item.completed = true;
-        UpdateOrderText();
-
-        if (IsOrderComplete())
-        {
-            currentOrder.Clear();
-            orderText.SetText("Thank you for your order");
-        }
-    }
-
     // other scripts can use this to check if an organ is still needed
-    public bool IsOrganNeeded(int organID)
+    public bool IsOrganNeeded(OrganType organType)
     {
-        OrderItem item = FindItem(currentOrder, organID);
-        return item != null && !item.completed;
+        foreach (OrderItem item in currentOrder)
+        {
+            if (item.organType == organType && !item.completed)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private bool IsOrderComplete()
@@ -134,14 +146,14 @@ public class OrganOrderRecipe : MonoBehaviour
         return true;
     }
 
-    // looks through a list for an organ with this id, returns null if it isnt there
-    private OrderItem FindItem(List<OrderItem> list, int organID)
+    // finds the jar that wants this organ, returns null if there isnt one
+    private OrganJar FindJar(OrganType organType)
     {
-        foreach (OrderItem item in list)
+        foreach (OrganJar jar in jars)
         {
-            if (item.organID == organID)
+            if (jar.wantedOrgan == organType)
             {
-                return item;
+                return jar;
             }
         }
         return null;
@@ -155,11 +167,11 @@ public class OrganOrderRecipe : MonoBehaviour
         {
             if (item.completed)
             {
-                text += "<s>" + item.organName + "</s>\n"; // crosses out the organ
+                text += "<s>" + item.organType + "</s>\n"; // crosses out the organ
             }
             else
             {
-                text += item.organName + "\n";
+                text += item.organType + "\n";
             }
         }
 
