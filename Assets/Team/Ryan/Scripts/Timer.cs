@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class Timer : MonoBehaviour
 {
     // These feilds allow us to edit in the inspector in unity
     [SerializeField] TextMeshProUGUI timerText;
     [SerializeField] float remainingTime = 60f ;
+
+    public static event Action TimerEnd;
 
     void Start()
     {
@@ -27,6 +30,7 @@ public class Timer : MonoBehaviour
         else if (remainingTime < 0)
         {
             remainingTime = 0;
+            TimerEnd.Invoke();
             Debug.Log ("Game Over");
         }
         // this piece of code creates the integers for minutes and seconds and 
