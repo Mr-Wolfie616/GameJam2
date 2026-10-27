@@ -153,7 +153,6 @@ MonoBehaviour:
   generateOrderOnStart: 1
   testWithoutJars: 1
   orderText: {fileID: 1015142124}
-  warningText: {fileID: 0}
 --- !u!4 &80038350
 Transform:
   m_ObjectHideFlags: 0
