@@ -1,18 +1,35 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CustomCursor : MonoBehaviour
 {
     public static CustomCursor instance;
 
-    // Cursor textures need to be 64x but exported 4x at 256x for scale
-    public Texture2D point;
-    public Texture2D click;
-    public Texture2D hover;
-    public Texture2D grab;
-    private Texture2D currentCursor;
+    public Image cursorImage;
 
-    public Vector2 hotspot = new Vector2(28, 6);
-    public CursorMode cursorMode;
+    // Cursor textures need to be 64x but exported 4x at 256x for scale
+    public Sprite point;
+    public Sprite click;
+    public Sprite hover;
+    public Sprite grab;
+    private Sprite currentCursor;
+
+    public Vector2 offset;
+    private Vector2 storeOffset;
+    private Vector2 mousePos;
+
+    private Vector2 currentShake; 
+
+    public void SetOffset(Vector2 newOffset)
+    {
+        currentShake = newOffset;
+        offset = storeOffset + newOffset;
+    }
+
+    public void ResetOffset()
+    {
+        offset = storeOffset;
+    }
 
     private void Awake()
     {
@@ -29,10 +46,13 @@ public class CustomCursor : MonoBehaviour
 
     private void Start()
     {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
         CursorClick();
+        storeOffset = offset;
     }
 
-    public void SetCurrentCursor(Texture2D cursor)
+    public void SetCurrentCursor(Sprite cursor)
     {
         currentCursor = cursor;
 
@@ -41,7 +61,25 @@ public class CustomCursor : MonoBehaviour
             currentCursor = point;
         }
 
-        Cursor.SetCursor(currentCursor, hotspot, cursorMode);
+        cursorImage.sprite = currentCursor;
+        cursorImage.SetNativeSize();
+    }
+
+    private void Update()
+    {
+        mousePos = Input.mousePosition;
+        Vector2 cursorPosition = mousePos + offset;
+        cursorImage.transform.position = cursorPosition;
+    }
+
+    public Vector2 GetCursorScreenPos()
+    {
+        return mousePos + currentShake;
+    }
+
+    public Vector3 GetCursorWorldPos()
+    {
+        return Camera.main.ScreenToWorldPoint(GetCursorScreenPos());
     }
 
     public void CursorClick() { SetCurrentCursor(click); }

@@ -65,7 +65,7 @@ public class GrabOrgan : MonoBehaviour, IInteractable
 
     public OrganJar CheckJar()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(CustomCursor.instance.GetCursorScreenPos());
         OrganJar jar = null;
         if (Physics.Raycast(ray, out RaycastHit hit3D, maxDistance, jarLayer))
         {
