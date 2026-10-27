@@ -9,6 +9,9 @@ public class GrabOrgan : MonoBehaviour, IInteractable
     private OrganJar currentJar;
     private CursorHoldOffset cursorHoldOffset;
     private bool holding = false;
+
+    public LayerMask jarLayer;
+    private float maxDistance = 100f;
     private void Awake()
     {
         organ = GetComponent<Organ>();
@@ -25,7 +28,7 @@ public class GrabOrgan : MonoBehaviour, IInteractable
     }
     public void OnClick()
     {
-        Debug.Log("Clicked on organ: " + organ.type.ToString());
+        //Debug.Log("Clicked on organ: " + organ.type.ToString());
         if (organ.inHand) { return; }
 
         organ.inHand = true;
@@ -44,24 +47,30 @@ public class GrabOrgan : MonoBehaviour, IInteractable
         organ.inHand = false;
         holding = false;
 
-        if (overJar)
+        currentJar = CheckJar();
+
+        if (currentJar != null)
         {
+            overJar = true;
             currentJar.FillJar(organ);
             {
                 Debug.Log(Equals(currentJar.wantedOrgan, organ.type));
             }
         }
+        else
+        {
+            overJar = false;
+        }
     }
 
-    public void OnTriggerEnter(Collider other)
+    public OrganJar CheckJar()
     {
-        if (other.CompareTag("OrganJar"))
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        OrganJar jar = null;
+        if (Physics.Raycast(ray, out RaycastHit hit3D, maxDistance, jarLayer))
         {
-            currentJar = other.GetComponent<OrganJar>();
-            if (currentJar != null)
-            {
-                overJar = true;
-            }
+            jar = hit3D.collider.gameObject.GetComponent<OrganJar>();
         }
+        return jar;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class OrganJar : MonoBehaviour
@@ -6,6 +7,8 @@ public class OrganJar : MonoBehaviour
     public bool full = false;
     public bool correctFill = false;
     private Organ currentOrgan = null;
+
+    public static event Action UpdateJar;
     public void SetWantedOrgan(OrganType organType)
     {
         wantedOrgan = organType;
@@ -35,8 +38,10 @@ public class OrganJar : MonoBehaviour
         else
         {
             correctFill = false;
-            Debug.Log("Incorrect organ. Jar remains empty.");
+            Debug.Log("Incorrect organ.");
         }
+
+        UpdateJar.Invoke();
     }
 
     public void TakeOutJar()
