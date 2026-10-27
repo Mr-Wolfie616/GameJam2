@@ -23,7 +23,6 @@ public class OrganOrderRecipe : MonoBehaviour
 
     [Header("UI")]
     public TMP_Text orderText;
-    public TMP_Text warningText;
 
     private OrganJar[] jars;                                       // every jar in the scene
     private List<OrderItem> currentOrder = new List<OrderItem>();  // the organs in the current order
@@ -88,11 +87,6 @@ public class OrganOrderRecipe : MonoBehaviour
         {
             GenerateOrder();
             UpdateOrderText();
-            SetWarning("");
-        }
-        else
-        {
-            SetWarning("Complete the current order before generating a new one.");
         }
     }
 
@@ -214,11 +208,4 @@ public class OrganOrderRecipe : MonoBehaviour
         orderText.SetText(text);
     }
 
-    private void SetWarning(string message)
-    {
-        if (warningText != null)
-        {
-            warningText.SetText(message);
-        }
-    }
 }
