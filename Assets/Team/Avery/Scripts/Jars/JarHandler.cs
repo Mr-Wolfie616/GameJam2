@@ -11,7 +11,10 @@ public class JarHandler : MonoBehaviour
     public static event Action OnFail;
 
     private List<OrganJar> needyJars = new();
-
+    private void Awake()
+    {
+        CheckIfThePlayerDidIt();
+    }
     private void OnEnable()
     {
         OrganJar.UpdateJar += CheckIfThePlayerDidIt;
@@ -42,20 +45,26 @@ public class JarHandler : MonoBehaviour
             }
         }
 
+        int numberOfNeedyJars = needyJars.Count;
+        int numberOfCorrectlyFilledJars = 0;
+
         foreach (OrganJar jar in needyJars)
         {
-            if (!jar.correctFill )
+            if (jar.correctFill)
             {
-                Debug.Log("Player did not fill all jars correctly.");
-                OnFail.Invoke();
-                return;
+                numberOfCorrectlyFilledJars++;
             }
-            else
-            {
-                Debug.Log("Player filled all jars correctly.");
-                OnSucceed.Invoke();
-                return;
-            }
+        }
+
+        Debug.Log($"Number of needy jars: {numberOfNeedyJars}, Number of correctly filled jars: {numberOfCorrectlyFilledJars}");
+
+        if (numberOfNeedyJars == numberOfCorrectlyFilledJars)
+        {
+            OnSucceed?.Invoke();
+        }
+        else
+        {
+            OnFail?.Invoke();
         }
     }
 }
