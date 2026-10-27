@@ -35,7 +35,7 @@ public class OrganJar : MonoBehaviour
         else
         {
             correctFill = false;
-            Debug.Log("Incorrect organ. Jar remains empty.");
+            Debug.Log("Incorrect organ.");
         }
     }
 
