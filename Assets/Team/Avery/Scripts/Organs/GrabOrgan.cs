@@ -42,7 +42,6 @@ public class GrabOrgan : MonoBehaviour, IInteractable
     public void OnClick()
     {
         //Debug.Log("Clicked on organ: " + organ.type.ToString());
-        splatterScript.IncreaseSplatter();
         if (organ.inHand) { return; }
         if (!isGrabbable) { return; }
         organ.inHand = true;

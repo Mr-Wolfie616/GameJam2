@@ -1,22 +1,14 @@
 using UnityEngine;
-
-public class RibSmash : MonoBehaviour, IInteractable
+using System.Collections.Generic;
+public class RibSmash : MonoBehaviour
 {
-    public void OnClick()
+    private AudioSource audioSource;
+    public List<AudioClip> boneAudioSources = new List<AudioClip>();
+    public void smashs()
     {
-        
-    }
-
-    public void OnHold()
-    {
-    }
-
-    public void OnRelease()
-    {
-        if (SurgeryTools.instance.heldTool != ToolType.Bonesaw)
-        {
-            return;
-        }
+        GameObject temp = new GameObject("TempAudio");
+        audioSource = temp.AddComponent<AudioSource>();
+        audioSource.PlayOneShot(boneAudioSources[Random.Range(0, boneAudioSources.Count)]);
         Destroy(gameObject);
     }
 }
