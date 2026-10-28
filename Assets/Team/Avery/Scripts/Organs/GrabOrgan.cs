@@ -30,7 +30,6 @@ public class GrabOrgan : MonoBehaviour, IInteractable
         organ = GetComponent<Organ>();
         splatterScript = FindFirstObjectByType<BloodSplatter>();
 
-        audioSources = new List<AudioClip>();
         audioSource = GetComponent<AudioSource>();
     }
 
