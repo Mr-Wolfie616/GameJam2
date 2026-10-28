@@ -35,7 +35,7 @@ public class ShadowAnimation : MonoBehaviour
         image.color = new Color(255, 255, 255, Mathf.Lerp
         (
             image.color.a, 
-            (float) (Mathf.Sin(YposTimer*3) / 2 + 1.5)/4, 
+            ((float) (Mathf.Sin(YposTimer*3) / 2 + 1.5)/4) + 0.5f, 
             0.01f
         ));
 
