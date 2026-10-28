@@ -630,7 +630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2565231bff156464ea36ce7f79ab5594, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BloodLettingEvent
-  on: 1
+  on: 0
   leech: 0
   Shadow: {fileID: 8132259593675262694, guid: 86f1d08fb871acc47be32cb84ac07445, type: 3}
   UI: {fileID: 1521260468}
