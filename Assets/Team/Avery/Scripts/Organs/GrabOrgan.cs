@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -16,6 +17,11 @@ public class GrabOrgan : MonoBehaviour, IInteractable
     public LayerMask jarLayer;
     private float maxDistance = 100f;
 
+    public List<AudioClip> audioSources;
+    public List<AudioClip> goreAudioSources;
+    private AudioSource audioSource;
+
+
     private Collider organCollider;
     private Vector3 grabOffset;
     private void Awake()
@@ -23,6 +29,9 @@ public class GrabOrgan : MonoBehaviour, IInteractable
         organCollider = GetComponent<Collider>();
         organ = GetComponent<Organ>();
         splatterScript = FindFirstObjectByType<BloodSplatter>();
+
+        audioSources = new List<AudioClip>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -46,6 +55,8 @@ public class GrabOrgan : MonoBehaviour, IInteractable
         if (!isGrabbable) { return; }
         organ.inHand = true;
         holding = true;
+
+        audioSource.PlayOneShot(goreAudioSources[Random.Range(0, goreAudioSources.Count)]);
 
         GrabHandler.Instance.AttachObject(gameObject, grabPoint);
         grabOffset = transform.position - organCollider.bounds.center;
@@ -73,6 +84,8 @@ public class GrabOrgan : MonoBehaviour, IInteractable
             currentJar.FillJar(organ);
             {
                 Debug.Log(Equals(currentJar.wantedOrgan, organ.type));
+
+                audioSource.PlayOneShot(audioSources[Random.Range(0, audioSources.Count)]);
             }
         }
         else
