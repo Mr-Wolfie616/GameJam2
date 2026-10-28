@@ -7,27 +7,36 @@ public class GrabOrgan : MonoBehaviour, IInteractable
     private bool overJar = false;
     private Organ organ;
     private OrganJar currentJar;
-    private CursorHoldOffset cursorHoldOffset;
     private bool holding = false;
 
     public bool isGrabbable = true;
+    public Transform grabPoint;
 
     public LayerMask jarLayer;
     private float maxDistance = 100f;
+
+    private Collider organCollider;
+    private Vector3 grabOffset;
     private void Awake()
     {
+        organCollider = GetComponent<Collider>();
         organ = GetComponent<Organ>();
-        cursorHoldOffset = GetComponent<CursorHoldOffset>();
     }
 
     private void Update()
     {
-        if (holding)
+        if (!holding || grabPoint == null) return;
+
+        if (organCollider != null)
         {
-            Vector3 pos = cursorHoldOffset.GetCursorWorldPosition();
-            transform.position = pos;
+            transform.position = grabPoint.position + grabOffset;
+        }
+        else
+        {
+            transform.position = grabPoint.position;
         }
     }
+
     public void OnClick()
     {
         //Debug.Log("Clicked on organ: " + organ.type.ToString());
@@ -35,6 +44,9 @@ public class GrabOrgan : MonoBehaviour, IInteractable
         if (!isGrabbable) { return; }
         organ.inHand = true;
         holding = true;
+
+        GrabHandler.Instance.AttachObject(gameObject, grabPoint);
+        grabOffset = transform.position - organCollider.bounds.center;
     }
 
     public void OnHold() 
@@ -48,6 +60,8 @@ public class GrabOrgan : MonoBehaviour, IInteractable
         
         organ.inHand = false;
         holding = false;
+
+        GrabHandler.Instance.LetGo(gameObject, grabPoint);
 
         currentJar = CheckJar();
 
@@ -63,6 +77,9 @@ public class GrabOrgan : MonoBehaviour, IInteractable
         {
             overJar = false;
         }
+
+        var rb = GetComponent<Rigidbody>();
+        rb.isKinematic = false;
     }
 
     public void ToggleGrabbable()
