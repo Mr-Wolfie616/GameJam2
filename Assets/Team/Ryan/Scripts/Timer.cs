@@ -17,7 +17,6 @@ public class Timer : MonoBehaviour
         Empty           // 0%
     }
 
-    
     [Header("Timer")]
     [SerializeField] TextMeshProUGUI timerText;
     [SerializeField] float remainingTime = 60f;   // this is also the time it resets back to

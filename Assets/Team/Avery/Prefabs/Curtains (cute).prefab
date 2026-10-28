@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.32941177, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -128,7 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CurtainMove
   leftCurtain: {fileID: 959829399362158524}
   rightCurtain: {fileID: 1149785063614343313}
-  duration: 0.5
+  duration: 0.75
   leftClosedMin: {x: 0, y: 0}
   leftClosedMax: {x: 0.5, y: 1}
   leftOpenMin: {x: 0, y: 0}
@@ -165,8 +165,8 @@ RectTransform:
   m_GameObject: {fileID: 5555601817856424194}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 7.27}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 0.5, y: 0.7, z: 0.5}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7520235140360738455}
   m_Father: {fileID: 0}
@@ -297,7 +297,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.32941177, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
