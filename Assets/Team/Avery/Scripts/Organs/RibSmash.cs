@@ -4,11 +4,7 @@ public class RibSmash : MonoBehaviour, IInteractable
 {
     public void OnClick()
     {
-        if (SurgeryTools.instance.heldTool != ToolType.Bonesaw)
-        {
-            return;
-        }
-        Destroy(gameObject);
+        
     }
 
     public void OnHold()
@@ -17,5 +13,10 @@ public class RibSmash : MonoBehaviour, IInteractable
 
     public void OnRelease()
     {
+        if (SurgeryTools.instance.heldTool != ToolType.Bonesaw)
+        {
+            return;
+        }
+        Destroy(gameObject);
     }
 }
