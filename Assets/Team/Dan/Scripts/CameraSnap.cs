@@ -4,34 +4,38 @@ public class CameraSnap : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] GameObject cameraObject;
+    [SerializeField] MainMenuManager menuManager;
     string currentFacingDirection = "straight";
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (menuManager.isPlayMode)
         {
-            if (currentFacingDirection == "straight")
+            if (Input.GetKeyDown(KeyCode.A))
             {
-                currentFacingDirection = "left";
-                SetCameraRotation(-90f);
+                if (currentFacingDirection == "straight")
+                {
+                    currentFacingDirection = "left";
+                    SetCameraRotation(-90f);
+                }
+                else if (currentFacingDirection == "right")
+                {
+                    currentFacingDirection = "straight";
+                    SetCameraRotation(0f);
+                }
             }
-            else if (currentFacingDirection == "right")
+            else if (Input.GetKeyDown(KeyCode.D))
             {
-                currentFacingDirection = "straight";
-                SetCameraRotation(0f);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.D))
-        {
-            if (currentFacingDirection == "straight")
-            {
-                currentFacingDirection = "right";
-                SetCameraRotation(90f);
-            }
-            else if (currentFacingDirection == "left")
-            {
-                currentFacingDirection = "straight";
-                SetCameraRotation(0f);
+                if (currentFacingDirection == "straight")
+                {
+                    currentFacingDirection = "right";
+                    SetCameraRotation(90f);
+                }
+                else if (currentFacingDirection == "left")
+                {
+                    currentFacingDirection = "straight";
+                    SetCameraRotation(0f);
+                }
             }
         }
     }
