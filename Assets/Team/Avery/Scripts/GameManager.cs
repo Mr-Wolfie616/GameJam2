@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     private GameObject currentBody;
     public float curtainCloseTime = 3f;
     public static GameManager Instance { get; private set; }
-
+    private OrganOrderRecipe organOrderRecipe;
     private NewTimer newTimer;
     private void Awake()
     {
@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         newTimer = FindObjectOfType<NewTimer>();
+        organOrderRecipe = GetComponent<OrganOrderRecipe>();
         NewBody();
     }
 
@@ -51,6 +52,8 @@ public class GameManager : MonoBehaviour
         body.SetActive(false);
         currentBody = Instantiate(body, body.transform.position, body.transform.rotation);
         currentBody.SetActive(true);
+
+        organOrderRecipe.TryGenerateOrder();
 
         yield return new WaitForSeconds(time / 2f);
 
