@@ -28,6 +28,7 @@ public class CustomCursor : MonoBehaviour
 
     public void ResetOffset()
     {
+        currentShake = Vector2.zero;
         offset = storeOffset;
     }
 

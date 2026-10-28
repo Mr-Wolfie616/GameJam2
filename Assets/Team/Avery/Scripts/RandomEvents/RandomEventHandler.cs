@@ -67,8 +67,7 @@ public class RandomEventHandler : MonoBehaviour
     {
         if (currentEvent != null)
         {
-            currentEvent.EndEvent();
-            Debug.LogWarning("Force Ending Event");
+            Debug.LogWarning($"Cannot trigger a new random event while {currentEvent.GetType().Name} is active.");
             return;
         }
 
@@ -97,6 +96,10 @@ public class RandomEventHandler : MonoBehaviour
         // For Testing
         if (Input.GetKeyDown(KeyCode.E))
         {
+            if(currentEvent != null)
+            {
+                currentEvent.EndEvent();
+            }
             TriggerRandomEvent();
         }
     }
