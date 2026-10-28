@@ -18,8 +18,9 @@ public class GrabOrgan : MonoBehaviour, IInteractable
     private float maxDistance = 100f;
 
     public List<AudioClip> audioSources;
-
+    public List<AudioClip> goreAudioSources;
     private AudioSource audioSource;
+
 
     private Collider organCollider;
     private Vector3 grabOffset;
@@ -55,6 +56,8 @@ public class GrabOrgan : MonoBehaviour, IInteractable
         if (!isGrabbable) { return; }
         organ.inHand = true;
         holding = true;
+
+        audioSource.PlayOneShot(goreAudioSources[Random.Range(0, goreAudioSources.Count)]);
 
         GrabHandler.Instance.AttachObject(gameObject, grabPoint);
         grabOffset = transform.position - organCollider.bounds.center;
