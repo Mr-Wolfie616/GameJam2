@@ -13,7 +13,7 @@ public class LoseConCheck : MonoBehaviour
     {
         JarHandler.OnSucceed += PlayerDidIt;
         JarHandler.OnFail += PlayerDidntIt;
-        Timer.TimerEnd += TimerEnds;
+        NewTimer.onTimerEnd += TimerEnds;
     }
 
     void PlayerDidIt() { DidThePlayerManageToCompleteEverythingCorrectly = true; }

@@ -55,7 +55,12 @@ public class GrabOrgan : MonoBehaviour, IInteractable
         organ.inHand = true;
         holding = true;
 
-        audioSource.PlayOneShot(goreAudioSources[Random.Range(0, goreAudioSources.Count)]);
+        //AudioClip audioClip = goreAudioSources[Random.Range(0, goreAudioSources.Count)];
+
+        //if (audioClip)
+        //{
+        //    audioSource.PlayOneShot(audioClip);
+        //}
 
         GrabHandler.Instance.AttachObject(gameObject, grabPoint);
         grabOffset = transform.position - organCollider.bounds.center;
