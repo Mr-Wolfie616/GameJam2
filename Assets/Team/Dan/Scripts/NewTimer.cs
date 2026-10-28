@@ -1,19 +1,19 @@
 using UnityEngine;
+using System;
 using UnityEngine.Events;
 
 public class NewTimer : MonoBehaviour
 {
     [Header("Timer Settings")]
-    [SerializeField] private float duration = 60f;
+    [SerializeField] private float duration;
     [SerializeField] private bool startOnAwake = true;
 
-    [Header("Animation")]
+    [Header("Animator & Triggers")]
     [SerializeField] private Animator animator;
     [SerializeField] private string resetAnimatorTrigger = "Reset";
 
-    [Header("Events")]
-    public UnityEvent onTimerStart;
-    public UnityEvent onTimerEnd;
+    public static event Action onTimerStart;
+    public static event Action onTimerEnd;
 
     [Header("Percentage Milestone Events")]
     public UnityEvent on100Percent;
@@ -22,13 +22,13 @@ public class NewTimer : MonoBehaviour
     public UnityEvent on25Percent;
     public UnityEvent on0Percent;
 
-    [Header("Sprites")]
-    [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private Sprite hundred;
-    [SerializeField] private Sprite seventyFive;
-    [SerializeField] private Sprite fifty;
-    [SerializeField] private Sprite twentyFive;
-    [SerializeField] private Sprite zero;
+    [Header("Animation Clips")]
+    [SerializeField] private AnimationClip hundred;
+    [SerializeField] private AnimationClip seventyFive;
+    [SerializeField] private AnimationClip fifty;
+    [SerializeField] private AnimationClip twentyFive;
+    [SerializeField] private AnimationClip zero;
+    [SerializeField] private AnimationClip reset;
 
     private float currentTime;
     private bool isRunning = false;
@@ -90,21 +90,30 @@ public class NewTimer : MonoBehaviour
     {
         isRunning = false;
         currentTime = duration;
+        Debug.Log(duration);
 
-        triggered100 = false;
+        triggered100 = true;
         triggered75 = false;
         triggered50 = false;
         triggered25 = false;
         triggered0 = false;
 
-        if (animator != null && !string.IsNullOrEmpty(resetAnimatorTrigger))
+        if (reset != null)
+        {
+            UpdateAnim(reset);
+        }
+        else if (animator != null && !string.IsNullOrEmpty(resetAnimatorTrigger))
         {
             animator.SetTrigger(resetAnimatorTrigger);
         }
+        else
+        {
+            UpdateAnim(hundred);
+        }
 
-        UpdateSprite(hundred);
+        on100Percent?.Invoke();
 
-        CheckMilestones();
+        isRunning = true;
     }
 
     private void EndTimer()
@@ -121,39 +130,40 @@ public class NewTimer : MonoBehaviour
         if (!triggered100 && percentage >= 99.9f)
         {
             triggered100 = true;
-            UpdateSprite(hundred);
+            UpdateAnim(hundred);
             on100Percent?.Invoke();
         }
         else if (!triggered75 && percentage <= 75f && percentage > 50f)
         {
             triggered75 = true;
-            UpdateSprite(seventyFive);
+            UpdateAnim(seventyFive);
             on75Percent?.Invoke();
         }
         else if (!triggered50 && percentage <= 50f && percentage > 25f)
         {
             triggered50 = true;
-            UpdateSprite(fifty);
+            UpdateAnim(fifty);
             on50Percent?.Invoke();
         }
         else if (!triggered25 && percentage <= 25f && percentage > 0f)
         {
             triggered25 = true;
-            UpdateSprite(twentyFive);
+            UpdateAnim(twentyFive);
             on25Percent?.Invoke();
         }
         else if (!triggered0 && percentage <= 0f)
         {
             triggered0 = true;
-            UpdateSprite(zero);
+            UpdateAnim(zero);
             on0Percent?.Invoke();
         }
     }
-    private void UpdateSprite(Sprite newSprite)
+
+    private void UpdateAnim(AnimationClip clip)
     {
-        if (spriteRenderer != null && newSprite != null)
+        if (animator != null && clip != null)
         {
-            spriteRenderer.sprite = newSprite;
+            animator.Play(clip.name);
         }
     }
 }
