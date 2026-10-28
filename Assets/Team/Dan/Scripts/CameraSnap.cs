@@ -7,6 +7,8 @@ public class CameraSnap : MonoBehaviour
     [SerializeField] MainMenuManager menuManager;
     string currentFacingDirection = "straight";
 
+    float CameraRot = 0;
+
     void Update()
     {
         if (menuManager.isPlayMode)
@@ -16,12 +18,12 @@ public class CameraSnap : MonoBehaviour
                 if (currentFacingDirection == "straight")
                 {
                     currentFacingDirection = "left";
-                    SetCameraRotation(-90f);
+                    CameraRot = -90f;
                 }
                 else if (currentFacingDirection == "right")
                 {
                     currentFacingDirection = "straight";
-                    SetCameraRotation(0f);
+                    CameraRot = 0f;
                 }
             }
             else if (Input.GetKeyDown(KeyCode.D))
@@ -29,15 +31,24 @@ public class CameraSnap : MonoBehaviour
                 if (currentFacingDirection == "straight")
                 {
                     currentFacingDirection = "right";
-                    SetCameraRotation(90f);
+                    CameraRot = 90f;
                 }
                 else if (currentFacingDirection == "left")
                 {
                     currentFacingDirection = "straight";
-                    SetCameraRotation(0f);
+                    CameraRot = 0f;
                 }
             }
         }
+
+        Debug.Log(CameraRot);
+
+        cameraObject.transform.rotation = Quaternion.Lerp
+        (
+            cameraObject.transform.rotation, 
+            Quaternion.Euler(10f, CameraRot, 0f), 
+            0.1f
+        );
     }
 
     private void SetCameraRotation(float targetYAngle)
