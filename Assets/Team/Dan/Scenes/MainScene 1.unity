@@ -3240,6 +3240,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4046328408122922404}
     m_Modifications:
+    - target: {fileID: 273543624708708624, guid: 068a23a600c53c44bbb8cffe761d84d8,
+        type: 3}
+      propertyPath: splatterContainer
+      value: 
+      objectReference: {fileID: 9082963425698227628}
     - target: {fileID: 824088754975224608, guid: 068a23a600c53c44bbb8cffe761d84d8,
         type: 3}
       propertyPath: m_Name
