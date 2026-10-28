@@ -18,8 +18,7 @@ public class CustomCursor : MonoBehaviour
     private Vector2 storeOffset;
     private Vector2 mousePos;
 
-    private Vector2 currentShake; 
-
+    private Vector2 currentShake;
     public void SetOffset(Vector2 newOffset)
     {
         currentShake = newOffset;

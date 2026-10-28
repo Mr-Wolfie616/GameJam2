@@ -10,6 +10,8 @@ public class GrabOrgan : MonoBehaviour, IInteractable
     private CursorHoldOffset cursorHoldOffset;
     private bool holding = false;
 
+    public bool isGrabbable = true;
+
     public LayerMask jarLayer;
     private float maxDistance = 100f;
     private void Awake()
@@ -30,7 +32,7 @@ public class GrabOrgan : MonoBehaviour, IInteractable
     {
         //Debug.Log("Clicked on organ: " + organ.type.ToString());
         if (organ.inHand) { return; }
-
+        if (!isGrabbable) { return; }
         organ.inHand = true;
         holding = true;
     }
@@ -61,6 +63,11 @@ public class GrabOrgan : MonoBehaviour, IInteractable
         {
             overJar = false;
         }
+    }
+
+    public void ToggleGrabbable()
+    {
+        isGrabbable = !isGrabbable;
     }
 
     public OrganJar CheckJar()
