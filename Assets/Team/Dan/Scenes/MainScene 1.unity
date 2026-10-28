@@ -7260,7 +7260,6 @@ MonoBehaviour:
   mainMenuElements: {fileID: 1825243253162552721}
   pauseMenuElements: {fileID: 7509224393158599648}
   curtainScript: {fileID: 8637655117418073339}
-  isPauseMenu: 0
   isPlayMode: 0
 --- !u!224 &6904131270877513220
 RectTransform:
@@ -7887,7 +7886,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &8341164006756102054
 MonoBehaviour:
   m_ObjectHideFlags: 0

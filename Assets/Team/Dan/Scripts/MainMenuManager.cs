@@ -1,67 +1,112 @@
-using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
     [Header("Menu Elements")]
-    [SerializeField] GameObject titleText;
-    [SerializeField] GameObject startButton;
-    [SerializeField] GameObject creditsButton;
-    [SerializeField] GameObject leaveGameButton;
-    [SerializeField] GameObject creditsPanel;
+    [SerializeField] private GameObject titleText;
+    [SerializeField] private GameObject startButton;
+    [SerializeField] private GameObject creditsButton;
+    [SerializeField] private GameObject leaveGameButton;
+    [SerializeField] private GameObject creditsPanel;
 
-    [SerializeField] GameObject mainMenuElements;
-    [SerializeField] GameObject pauseMenuElements;
+    [SerializeField] private GameObject mainMenuElements;
+    [SerializeField] private GameObject pauseMenuElements;
 
     [Header("References")]
-    [SerializeField] CurtainMove curtainScript;
+    [SerializeField] private CurtainMove curtainScript;
 
     [Header("Configurables")]
-    [SerializeField] bool isPauseMenu;
     [SerializeField] public bool isPlayMode = false;
+
+    private bool isPaused = false;
+    private Coroutine pauseCoroutine;
 
     private void Start()
     {
-        pauseMenuElements.SetActive(false);
+        if (pauseMenuElements != null)
+            pauseMenuElements.SetActive(false);
+
+        if (creditsPanel != null)
+            creditsPanel.SetActive(false);
+
+        isPaused = false;
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape) && isPlayMode)
         {
-            curtainScript.CloseCurtains();
-            StartCoroutine(PauseDelay());
-            isPlayMode = false;
+            if (!isPaused)
+            {
+                PauseGame();
+            }
+            else
+            {
+                ResumeGame();
+            }
         }
-    }
-
-    IEnumerator PauseDelay()
-    {
-        yield return new WaitForSeconds(0.75f);
-        pauseMenuElements.SetActive(true);
-    }
-
-    public void ResumeGame()
-    {
-        curtainScript.OpenCurtains();
-        pauseMenuElements.SetActive(false);
-        isPlayMode = true;
     }
 
     public void StartGame()
     {
-        curtainScript.OpenCurtains();
-        mainMenuElements.SetActive(false);
+        if (curtainScript != null)
+            curtainScript.OpenCurtains();
+
+        if (mainMenuElements != null)
+            mainMenuElements.SetActive(false);
+
         isPlayMode = true;
+        isPaused = false;
+    }
+
+    public void PauseGame()
+    {
+        isPaused = true;
+
+        if (curtainScript != null)
+            curtainScript.CloseCurtains();
+
+        if (pauseCoroutine != null)
+            StopCoroutine(pauseCoroutine);
+
+        pauseCoroutine = StartCoroutine(PauseDelay());
+    }
+
+    public void ResumeGame()
+    {
+        isPaused = false;
+
+        if (pauseCoroutine != null)
+            StopCoroutine(pauseCoroutine);
+
+        if (curtainScript != null)
+            curtainScript.OpenCurtains();
+
+        if (pauseMenuElements != null)
+            pauseMenuElements.SetActive(false);
+    }
+
+    private IEnumerator PauseDelay()
+    {
+        yield return new WaitForSeconds(0.75f);
+        if (isPaused && pauseMenuElements != null)
+        {
+            pauseMenuElements.SetActive(true);
+        }
     }
 
     public void Credits()
     {
-        creditsPanel.SetActive(true);
-        mainMenuElements.SetActive(false);
+        if (creditsPanel != null) creditsPanel.SetActive(true);
+        if (mainMenuElements != null) mainMenuElements.SetActive(false);
+    }
+
+    public void Back()
+    {
+        if (creditsPanel != null) creditsPanel.SetActive(false);
+        if (mainMenuElements != null) mainMenuElements.SetActive(true);
     }
 
     public void LeaveGame()
@@ -69,17 +114,18 @@ public class MainMenuManager : MonoBehaviour
         Application.Quit();
     }
 
-    public void Back()
-    {
-        creditsPanel.SetActive(false);
-        mainMenuElements.SetActive(true);
-    }
-
     public void BackToMenu()
     {
-        curtainScript.CloseCurtains();
-        mainMenuElements.SetActive(true);
-        pauseMenuElements.SetActive(false);
+        if (pauseCoroutine != null)
+            StopCoroutine(pauseCoroutine);
+
+        if (curtainScript != null)
+            curtainScript.CloseCurtains();
+
+        if (mainMenuElements != null) mainMenuElements.SetActive(true);
+        if (pauseMenuElements != null) pauseMenuElements.SetActive(false);
+
         isPlayMode = false;
+        isPaused = false;
     }
 }
