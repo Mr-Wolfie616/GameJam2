@@ -32,7 +32,10 @@ public class MouseInteractor : MonoBehaviour
             return;
         }
 
-        Ray ray = cam.ScreenPointToRay(CustomCursor.instance.GetCursorScreenPos());
+        Vector2 cursorScreenPos = CustomCursor.instance != null
+            ? CustomCursor.instance.GetCursorScreenPos()
+            : Input.mousePosition;
+        Ray ray = cam.ScreenPointToRay(cursorScreenPos);
         Debug.DrawRay(ray.origin, ray.direction * maxDistance, Color.green);
         IInteractable target = GetInteractableUnderMouse(ray);
 
