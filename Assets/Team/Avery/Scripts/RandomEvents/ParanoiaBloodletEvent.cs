@@ -1,10 +1,9 @@
-using System;
-using System.Collections;
 using UnityEngine;
+
 public class ParanoiaBloodletEvent : RandomEvent
 {
     BloodLettingEvent ParanoiaManagerScript;
-    
+
     public override void TriggerEvent()
     {
         base.TriggerEvent();
