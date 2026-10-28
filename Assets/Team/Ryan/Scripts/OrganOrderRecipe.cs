@@ -137,6 +137,7 @@ public class OrganOrderRecipe : MonoBehaviour
         {
             currentOrder.Clear();
             orderText.SetText("Thank you for your order");
+            GameManager.Instance.NewBody();
         }
         else
         {
